@@ -48,6 +48,10 @@ fi
 if ! grep -q '^NEXT_PRIVATE_ALLOWED_PROXY_HOSTS=' .env.local 2>/dev/null; then
     echo "NEXT_PRIVATE_ALLOWED_PROXY_HOSTS=\"$PROXY_HOSTS\"" >>.env.local
 fi
+# The proxy connects over the box's network interface, not loopback.
+if ! grep -q '^DEV_SERVER_HOST=' .env.local 2>/dev/null; then
+    echo 'DEV_SERVER_HOST="0.0.0.0"' >>.env.local
+fi
 
 # `npm ci` wipes node_modules, so skip it when the lockfile and Node version
 # match what the last run installed.
