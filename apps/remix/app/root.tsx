@@ -5,6 +5,7 @@ import { getBasePath } from '@documenso/lib/constants/app';
 import { APP_I18N_OPTIONS, type SupportedLanguageCodes } from '@documenso/lib/constants/i18n';
 import { createPublicEnv } from '@documenso/lib/utils/env';
 import { extractLocaleData } from '@documenso/lib/utils/i18n';
+import { getRequestWebAppUrl } from '@documenso/lib/utils/proxy-origin';
 import { TrpcProvider } from '@documenso/trpc/react';
 import { getOrganisationSession } from '@documenso/trpc/server/organisation-router/get-organisation-session';
 import { Toaster } from '@documenso/ui/primitives/toaster';
@@ -85,7 +86,10 @@ export async function loader({ context, request }: Route.LoaderArgs) {
             organisations: organisations || [],
           }
         : null,
-      publicEnv: createPublicEnv(),
+      publicEnv: {
+        ...createPublicEnv(),
+        NEXT_PUBLIC_WEBAPP_URL: getRequestWebAppUrl(request),
+      },
     },
     {
       headers: {

@@ -73,6 +73,12 @@ const secureCookiePrefix = useSecureCookies ? '__Secure-' : '';
 export const formatSecureCookieName = (name: string) => `${secureCookiePrefix}${name}`;
 
 export const getCookieDomain = () => {
+  // When the app may be served from proxy hosts that are only known per
+  // request, use host-only cookies so they stick on whichever host served them.
+  if (env('NEXT_PRIVATE_ALLOWED_PROXY_HOSTS')) {
+    return undefined;
+  }
+
   const url = new URL(NEXT_PUBLIC_WEBAPP_URL());
 
   return url.hostname;

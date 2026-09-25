@@ -36,6 +36,12 @@ export default defineConfig({
   server: {
     port: parseInt(process.env.PORT || '3000', 10),
     strictPort: true,
+    // Let the dev server answer on the reverse-proxy hosts configured for
+    // origin trust (see NEXT_PRIVATE_ALLOWED_PROXY_HOSTS in .env.example).
+    allowedHosts: (process.env.NEXT_PRIVATE_ALLOWED_PROXY_HOSTS ?? '')
+      .split(',')
+      .map((host) => host.trim())
+      .filter(Boolean),
   },
   plugins: [
     viteStaticCopy({
