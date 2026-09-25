@@ -36,6 +36,15 @@ export default defineConfig({
   server: {
     port: parseInt(process.env.PORT || '3000', 10),
     strictPort: true,
+    // Interface to listen on. Defaults to localhost; set to 0.0.0.0 when a
+    // reverse proxy connects over the network rather than loopback.
+    host: process.env.DEV_SERVER_HOST || undefined,
+    // Let the dev server answer on the reverse-proxy hosts configured for
+    // origin trust (see NEXT_PRIVATE_ALLOWED_PROXY_HOSTS in .env.example).
+    allowedHosts: (process.env.NEXT_PRIVATE_ALLOWED_PROXY_HOSTS ?? '')
+      .split(',')
+      .map((host) => host.trim())
+      .filter(Boolean),
   },
   plugins: [
     viteStaticCopy({
