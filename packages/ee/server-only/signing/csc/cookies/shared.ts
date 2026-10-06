@@ -42,5 +42,8 @@ export const cscCookieBaseOptions = {
   path: '/',
   sameSite: useSecureCookies ? 'none' : 'lax',
   secure: useSecureCookies,
-  domain: getCookieDomain(),
+  // Getter so the domain follows the per-request web app URL.
+  get domain() {
+    return getCookieDomain();
+  },
 } as const;

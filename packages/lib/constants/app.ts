@@ -1,10 +1,12 @@
 import { env } from '@documenso/lib/utils/env';
 import { AppError, AppErrorCode } from '../errors/app-error';
 import { SignatureLevel, type TSignatureLevel } from '../types/signature-level';
+import { getRequestWebappUrl } from '../universal/request-webapp-url';
 
 export const APP_DOCUMENT_UPLOAD_SIZE_LIMIT = Number(env('NEXT_PUBLIC_DOCUMENT_SIZE_UPLOAD_LIMIT')) || 50;
 
-export const NEXT_PUBLIC_WEBAPP_URL = () => env('NEXT_PUBLIC_WEBAPP_URL') ?? 'http://localhost:3000';
+export const NEXT_PUBLIC_WEBAPP_URL = () =>
+  getRequestWebappUrl() ?? env('NEXT_PUBLIC_WEBAPP_URL') ?? 'http://localhost:3000';
 
 /**
  * The sub-path the app is served under (no trailing slash), e.g. "/ESign".

@@ -23,13 +23,18 @@ const getAuthSecret = () => {
 
 /**
  * Generic auth session cookie options.
+ *
+ * `domain` is a getter so it's resolved when the options are used: the web app
+ * URL can differ per request (see `NEXT_PRIVATE_TRUSTED_PROXY_HOSTS`).
  */
 export const sessionCookieOptions = {
   httpOnly: true,
   path: '/',
   sameSite: useSecureCookies ? 'none' : 'lax',
   secure: useSecureCookies,
-  domain: getCookieDomain(),
+  get domain() {
+    return getCookieDomain();
+  },
 } as const;
 
 export const extractSessionCookieFromHeaders = (headers: Headers): string | null => {

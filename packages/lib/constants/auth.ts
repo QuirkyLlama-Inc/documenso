@@ -1,5 +1,5 @@
 import MailChecker from 'mailchecker';
-
+import { getRequestWebappUrl } from '../universal/request-webapp-url';
 import { env } from '../utils/env';
 import { NEXT_PUBLIC_WEBAPP_URL } from './app';
 
@@ -73,6 +73,12 @@ const secureCookiePrefix = useSecureCookies ? '__Secure-' : '';
 export const formatSecureCookieName = (name: string) => `${secureCookiePrefix}${name}`;
 
 export const getCookieDomain = () => {
+  // Origins resolved per request from a trusted proxy get host-only cookies, so
+  // they're never shared with sibling hosts under the proxy's domain.
+  if (getRequestWebappUrl()) {
+    return undefined;
+  }
+
   const url = new URL(NEXT_PUBLIC_WEBAPP_URL());
 
   return url.hostname;

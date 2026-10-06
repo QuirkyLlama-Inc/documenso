@@ -32,6 +32,7 @@ import { appMiddleware } from './middleware';
 import { securityHeadersMiddleware } from './security-headers';
 import { openApiTrpcServerHandler } from './trpc/hono-trpc-open-api';
 import { reactRouterTrpcServer } from './trpc/hono-trpc-remix';
+import { trustedProxyOriginMiddleware } from './trusted-proxy-origin';
 
 // Re-export so the rollup build (entry: server/router.ts) bundles
 // load-context.ts. server/main.js imports getLoadContext from the rolled-up
@@ -43,6 +44,7 @@ export interface HonoEnv {
     context: AppContext;
     logger: Logger;
     cspNonce: string;
+    webappUrl?: string;
   };
 }
 
@@ -63,6 +65,7 @@ const fileRateLimitMiddleware = createRateLimitMiddleware(fileUploadRateLimit);
  * Attach session and context to requests.
  */
 app.use(contextStorage());
+app.use(trustedProxyOriginMiddleware);
 app.use(appContext);
 
 /**

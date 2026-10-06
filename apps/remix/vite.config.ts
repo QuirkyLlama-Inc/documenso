@@ -36,6 +36,12 @@ export default defineConfig({
   server: {
     port: parseInt(process.env.PORT || '3000', 10),
     strictPort: true,
+    // Set HOST=0.0.0.0 to expose the dev server beyond loopback (remote devboxes, containers).
+    host: process.env.HOST || undefined,
+    // Comma-separated extra hostnames the dev server should answer to, e.g. ".proxy.example.com".
+    allowedHosts: process.env.NEXT_PRIVATE_DEV_ALLOWED_HOSTS
+      ? process.env.NEXT_PRIVATE_DEV_ALLOWED_HOSTS.split(',').map((host) => host.trim())
+      : undefined,
   },
   plugins: [
     viteStaticCopy({
